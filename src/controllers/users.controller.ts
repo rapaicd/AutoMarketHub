@@ -11,7 +11,7 @@ export function create (req:Request, res:Response) {
 
     User.create(user)
         .then((data: any) => {
-            res.send(data);
+            res.status(201).send(data);
         })
         .catch((err:Error) => {
             res.status(500).send({
@@ -28,7 +28,7 @@ export function findAll (req:Request, res:Response) {
     // User.findAll({ where: condition })
     User.findAll()
         .then((data: any) => {
-            res.send(data);
+            res.status(200).send(data);
         })
         .catch((err:Error) => {
             res.status(500).send({

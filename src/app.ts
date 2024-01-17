@@ -13,12 +13,7 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-app.use(express.json());//explain
-app.use(
-  express.urlencoded({
-    extended: true,
-  })
-);
+app.use(express.json());
 
 db.sequelize.sync()
   .then(() => {

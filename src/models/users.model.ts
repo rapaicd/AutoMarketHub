@@ -2,7 +2,7 @@ import { Sequelize, DataTypes,  } from 'sequelize';
 import {UserStatic } from '../utils/interfaces';
 
 const User = (sequelize: Sequelize): UserStatic => {
-  return <UserStatic>sequelize.define("users", {
+  return <UserStatic>sequelize.define("user", {
     first_name: {
       type: DataTypes.STRING
     },
