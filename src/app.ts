@@ -3,13 +3,14 @@ import dotenv from "dotenv";
 import cors from 'cors';
 import db from "./models/db";
 import userRouter from './routes/users.routes'
+import vehicleRouter from './routes/vehicles.routes'
 
 const app: Express = express();
 
 dotenv.config();
 
 const corsOptions = {
-  origin: 'http://localhost:8080/'
+  origin: 'http://localhost:3000'
 };
 app.use(cors(corsOptions));
 
@@ -23,11 +24,7 @@ db.sequelize.sync()
     console.log("Failed to sync db: " + err.message);
   });
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Ok");
-});
-
-app.use('/users',userRouter)
-
+app.use('/users', userRouter)
+app.use('/vehicles', vehicleRouter)
 
 export default app;

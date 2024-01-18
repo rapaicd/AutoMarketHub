@@ -1,8 +1,11 @@
-import { Sequelize, Model, DataTypes, BuildOptions } from 'sequelize';
-import { VehicleProps, VehicleStatic } from '../utils/interfaces';
+import { Sequelize, DataTypes } from 'sequelize';
+import { VehicleStatic } from '../utils/interfaces';
 
 const Vehicle = (sequelize: Sequelize): VehicleStatic => {
-  return <VehicleStatic>sequelize.define("vehicles", {
+  return <VehicleStatic>sequelize.define("vehicle", {
+    name:{
+      type: DataTypes.STRING
+    },
     type: {
       type: DataTypes.STRING
     },

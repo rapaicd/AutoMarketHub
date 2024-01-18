@@ -1,12 +1,12 @@
 import { BuildOptions, Model, Sequelize } from "sequelize";
 
-export interface UserProps {
+interface UserProps {
     first_name: string;
     last_name: string;
     phone_nuumber: string
 }
 
-export interface VehicleProps {
+interface VehicleProps {
     type: string;
     color: string;
     year: string
@@ -23,8 +23,7 @@ export type VehicleStatic = typeof Model & {
 };
 
 export interface DBConfigProps {
-    Sequelize: typeof Sequelize;
     sequelize: Sequelize;
     user: UserStatic;
     vehicle: VehicleStatic;
-  }
+}

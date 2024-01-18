@@ -23,7 +23,6 @@ const sequelize = new Sequelize(
 );
 
 const db: DBConfigProps = {
-    Sequelize,
     sequelize,
     user: User(sequelize),
     vehicle: Vehicle(sequelize),
