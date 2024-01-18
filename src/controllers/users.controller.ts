@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import db from "../models/db";
+import { UserAttributes } from "../utils/interfaces";
 
 const User = db.user;
 
@@ -11,7 +12,7 @@ export function create(req: Request, res: Response) {
     };
 
     User.create(user)
-        .then((data: any) => {
+        .then((data: UserAttributes) => {
             res.status(201).send(data);
         })
         .catch((err: Error) => {
@@ -29,7 +30,7 @@ export function findAll(req: Request, res: Response) {
     // User.findAll({ where: condition })
 
     User.findAll()
-        .then((data: any) => {
+        .then((data: UserAttributes[]) => {
             res.status(200).send(data);
         })
         .catch((err: Error) => {
@@ -90,8 +91,6 @@ export function deleteObject(req: Request, res: Response) {
 
     User.destroy({ where: { id: id } })
         .then((num: Number) => {
-            console.log('num', num)
-            console.log('num type', typeof (num))
             if (num === 1) {
                 res.send({
                     message: "User was deleted successfully!"

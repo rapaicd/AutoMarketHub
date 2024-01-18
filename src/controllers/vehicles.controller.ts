@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import db from "../models/db";
+import { VehicleAttributes } from "../utils/interfaces";
 
 const Vehicle = db.vehicle;
 
@@ -12,7 +13,7 @@ export function create(req: Request, res: Response) {
     };
 
     Vehicle.create(vehicle)
-        .then((data: any) => {
+        .then((data: VehicleAttributes) => {
             res.status(201).send(data);
         })
         .catch((err: Error) => {
@@ -30,7 +31,7 @@ export function findAll(req: Request, res: Response) {
     // Vehicle.findAll({ where: condition })
 
     Vehicle.findAll()
-        .then((data: any) => {
+        .then((data: VehicleAttributes[]) => {
             res.status(200).send(data);
         })
         .catch((err: Error) => {

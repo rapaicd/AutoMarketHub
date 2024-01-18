@@ -1,23 +1,23 @@
 import { BuildOptions, Model, Sequelize } from "sequelize";
 
-interface UserProps {
+export interface UserAttributes {
     first_name: string;
     last_name: string;
-    phone_nuumber: string
+    phone_number: string
 }
 
-interface VehicleProps {
+export interface VehicleAttributes {
     type: string;
     color: string;
     year: string
 }
 
-type UserModel = Model & UserProps;
+export type UserModel = Model & UserAttributes;
 export type UserStatic = typeof Model & {
     new(values?: Record<string, unknown>, options?: BuildOptions): UserModel;
 };
 
-type VehicleModel = Model & VehicleProps;
+type VehicleModel = Model & VehicleAttributes;
 export type VehicleStatic = typeof Model & {
     new(values?: Record<string, unknown>, options?: BuildOptions): VehicleModel;
 };
