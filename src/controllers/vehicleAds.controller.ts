@@ -10,7 +10,7 @@ export function create(req: Request, res: Response) {
         type: req.body.type,
         color: req.body.color,
         year: req.body.year,
-        userId: req.body.userId,
+        userId: req.params.id,
         price: req.body.price,
     };
 
