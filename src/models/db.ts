@@ -2,7 +2,7 @@ import { Sequelize, Options } from 'sequelize';
 import DBConfig from "../config/db.config";
 import { DBConfigProps } from '../utils/interfaces'
 import User from './users.model';
-import Vehicle from './vehicles.model';
+import VehicleAd from './vehicleAds.model';
 
 const sequelizeOptions: Options = {
     host: DBConfig.HOST,
@@ -25,7 +25,16 @@ const sequelize = new Sequelize(
 const db: DBConfigProps = {
     sequelize,
     user: User(sequelize),
-    vehicle: Vehicle(sequelize),
+    vehicleAd: VehicleAd(sequelize),
 };
+
+db.user.hasMany(db.vehicleAd, {
+    as: 'vehicleAds',
+    foreignKey: {
+        name: 'userId',
+        allowNull: false,
+    }
+});
+db.vehicleAd.belongsTo(db.user);
 
 export default db;

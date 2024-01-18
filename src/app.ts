@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cors from 'cors';
 import db from "./models/db";
 import userRouter from './routes/users.routes'
-import vehicleRouter from './routes/vehicles.routes'
+import vehicleAdRouter from './routes/vehicleAds.routes'
 
 const app: Express = express();
 
@@ -25,6 +25,6 @@ db.sequelize.sync()
   });
 
 app.use('/users', userRouter)
-app.use('/vehicles', vehicleRouter)
+app.use('/vehicleAds', vehicleAdRouter)
 
 export default app;

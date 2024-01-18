@@ -6,24 +6,25 @@ export interface UserAttributes {
     phone_number: string
 }
 
-export interface VehicleAttributes {
+export interface VehicleAdAttributes {
     type: string;
     color: string;
-    year: string
+    year: string;
+    userId:Number;
 }
 
-export type UserModel = Model & UserAttributes;
+type UserModel = Model & UserAttributes;
 export type UserStatic = typeof Model & {
     new(values?: Record<string, unknown>, options?: BuildOptions): UserModel;
 };
 
-type VehicleModel = Model & VehicleAttributes;
-export type VehicleStatic = typeof Model & {
+type VehicleModel = Model & VehicleAdAttributes;
+export type VehicleAdStatic = typeof Model & {
     new(values?: Record<string, unknown>, options?: BuildOptions): VehicleModel;
 };
 
 export interface DBConfigProps {
     sequelize: Sequelize;
     user: UserStatic;
-    vehicle: VehicleStatic;
+    vehicleAd: VehicleAdStatic;
 }

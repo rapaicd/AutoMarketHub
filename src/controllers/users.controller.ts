@@ -8,7 +8,8 @@ export function create(req: Request, res: Response) {
     const user = {
         first_name: req.body.first_name,
         last_name: req.body.last_name,
-        phone_number: req.body.phone_number
+        phone_number: req.body.phone_number,
+        email: req.body.email,
     };
 
     User.create(user)
