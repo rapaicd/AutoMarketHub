@@ -1,5 +1,5 @@
 import { BuildOptions, Model, Sequelize } from "sequelize";
-
+import { Op } from 'sequelize';
 export interface UserAttributes {
     first_name: string;
     last_name: string;
@@ -10,7 +10,7 @@ export interface VehicleAdAttributes {
     type: string;
     color: string;
     year: string;
-    userId:Number;
+    userId: Number;
 }
 
 type UserModel = Model & UserAttributes;
@@ -27,4 +27,14 @@ export interface DBConfigProps {
     sequelize: Sequelize;
     user: UserStatic;
     vehicleAd: VehicleAdStatic;
+}
+
+export interface Query {
+    name?: string;
+    type?: string;
+    color?: string;
+    yearMax?: number;
+    yearMin?: number;
+    priceMax?: number;
+    priceMin?: number;
 }

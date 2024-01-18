@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import db from "../models/db";
 import { VehicleAdAttributes } from "../utils/interfaces";
+import {generateConditions} from "../utils/helper"
 
 const VehicleAd = db.vehicleAd;
 
@@ -27,11 +28,6 @@ export function create(req: Request, res: Response) {
 };
 
 export function findAll(req: Request, res: Response) {
-
-    // const title = req.query.title;
-    // var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
-    // VehicleAd.findAll({ where: condition })
-
     VehicleAd.findAll()
         .then((data: VehicleAdAttributes[]) => {
             res.status(200).send(data);
@@ -39,7 +35,7 @@ export function findAll(req: Request, res: Response) {
         .catch((err: Error) => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving all users."
+                    err.message || "Some error occurred while retrieving all vehicles."
             });
         });
 };
@@ -58,7 +54,7 @@ export function findAllUserVehicleAds(req: Request, res: Response) {
         .catch((err: Error) => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving all users."
+                    err.message || "Some error occurred while retrieving user's vehicles."
             });
         });
 };
@@ -133,6 +129,24 @@ export function deleteObject(req: Request, res: Response) {
             res.status(500).send({
                 message:
                     err.message || "Some error occurred while deleting vehicleAd."
+            });
+        });
+};
+
+
+export function findAllWithFilters(req: Request, res: Response) {
+    VehicleAd.findAll(
+        {
+            where: generateConditions(req.query),
+            attributes: { exclude: ['userId'] }
+        })
+        .then((data: VehicleAdAttributes[]) => {
+            res.status(200).send(data);
+        })
+        .catch((err: Error) => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving filtered vehicles."
             });
         });
 };

@@ -24,7 +24,13 @@ db.sequelize.sync()
     console.log("Failed to sync db: " + err.message);
   });
 
+
+// set force to true for drop all tables
+db.sequelize.sync({ force: false }).then(() => {
+  console.log("Drop and re-sync db.");
+});
+
 app.use('/users', userRouter)
-app.use('/vehicleAds', vehicleAdRouter)
+app.use('/vehicleAds', vehicleAdRouter) 
 
 export default app;
