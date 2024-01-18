@@ -1,8 +1,8 @@
-import { Op } from 'sequelize';
-import { Query } from './interfaces';
+import { Op, WhereOptions } from 'sequelize';
+import { ConditionQuery, Query } from './interfaces';
 
 export const generateConditions = (query:Query) => {
-    const conditions: any = {}
+    const conditions: WhereOptions<ConditionQuery> = {}
 
     const name = query.name;
     const type = query.type;

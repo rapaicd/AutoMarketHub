@@ -38,3 +38,11 @@ export interface Query {
     priceMax?: number;
     priceMin?: number;
 }
+
+export interface ConditionQuery {
+    name?: { [Op.like]: string; };
+    type?: string;
+    color?: { [Op.like]: string; };
+    year?: {};
+    price?: {};
+}
