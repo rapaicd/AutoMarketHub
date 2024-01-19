@@ -33,10 +33,10 @@ export interface Query {
     name?: string;
     type?: string;
     color?: string;
-    yearMax?: number;
-    yearMin?: number;
-    priceMax?: number;
-    priceMin?: number;
+    year_to?: number;
+    year_from?: number;
+    price_max?: number;
+    price_min?: number;
 }
 
 export interface ConditionQuery {
@@ -46,3 +46,12 @@ export interface ConditionQuery {
     year?: {};
     price?: {};
 }
+
+export interface EmailMessageAttributes{
+    from: string | undefined;
+    to: string | undefined;
+    subject: string;
+    html:string;
+}
+
+export type PurchaserDataType = string | undefined; 

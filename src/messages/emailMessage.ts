@@ -1,0 +1,2 @@
+export const subject = 'Confirmation of Your Successful Vehicle Purchase';
+export const intro = 'We are delighted to inform you that your vehicle purchase has been successfully completed. Thank you for choosing us.';

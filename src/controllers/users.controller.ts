@@ -4,7 +4,7 @@ import { UserAttributes } from "../utils/interfaces";
 
 const User = db.user;
 
-export function create(req: Request, res: Response) {
+export const create = (req: Request, res: Response) => {
     const user = {
         first_name: req.body.first_name,
         last_name: req.body.last_name,
@@ -24,7 +24,7 @@ export function create(req: Request, res: Response) {
         });
 };
 
-export function findAll(req: Request, res: Response) {
+export const findAll = (req: Request, res: Response) => {
     User.findAll()
         .then((data: UserAttributes[]) => {
             res.status(200).send(data);
@@ -37,7 +37,7 @@ export function findAll(req: Request, res: Response) {
         });
 };
 
-export function findById(req: Request, res: Response) {
+export const findById = (req: Request, res: Response) => {
     const id = req.params.id;
 
     User.findByPk(id)
@@ -58,7 +58,7 @@ export function findById(req: Request, res: Response) {
         });
 };
 
-export function updateObject(req: Request, res: Response) {
+export const updateObject = (req: Request, res: Response) => {
     const id = req.params.id;
     const newObject = req.body;
 
@@ -82,7 +82,7 @@ export function updateObject(req: Request, res: Response) {
         });
 };
 
-export function deleteObject(req: Request, res: Response) {
+export const deleteObject = (req: Request, res: Response) => {
     const id = req.params.id;
 
     User.destroy({ where: { id: id } })

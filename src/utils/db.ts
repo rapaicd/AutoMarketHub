@@ -4,14 +4,14 @@ import User from '../models/users.model';
 import VehicleAd from '../models/vehicleAds.model';
 
 const sequelizeOptions: Options = {
-    host: process.env.DBHOST || 'localhost',
+    host: process.env.DB_HOST || 'localhost',
     dialect: 'mysql'
 };
 
 const sequelize = new Sequelize(
-    process.env.dbName || '',
-    process.env.dbUser || '',
-    process.env.dbPassword || '',
+    process.env.DB_NAME || '',
+    process.env.DB_USER || '',
+    process.env.DB_PASSWORD || '',
     sequelizeOptions
 );
 
