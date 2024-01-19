@@ -25,11 +25,6 @@ export function create(req: Request, res: Response) {
 };
 
 export function findAll(req: Request, res: Response) {
-
-    // const title = req.query.title;
-    // var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
-    // User.findAll({ where: condition })
-
     User.findAll()
         .then((data: UserAttributes[]) => {
             res.status(200).send(data);

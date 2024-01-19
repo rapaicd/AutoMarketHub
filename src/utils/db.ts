@@ -5,13 +5,7 @@ import VehicleAd from '../models/vehicleAds.model';
 
 const sequelizeOptions: Options = {
     host: process.env.DBHOST || 'localhost',
-    dialect: 'mysql',
-    pool: {
-        max: 5,
-        min: 0,
-        acquire: 30000,
-        idle: 10000,
-    }
+    dialect: 'mysql'
 };
 
 const sequelize = new Sequelize(

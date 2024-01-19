@@ -15,7 +15,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// db.sequelize.sync({ force: false }) //Drop and re-sync db
+//Drop and re-sync db
+// db.sequelize.sync({ force: false }) 
 db.sequelize.sync()
   .then(() => {
     app.listen(port, () => {
