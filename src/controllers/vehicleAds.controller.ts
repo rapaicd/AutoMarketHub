@@ -1,0 +1,168 @@
+import { Request, Response } from 'express';
+import db from '../utils/db';
+import { PurchaserDataType, VehicleAdAttributes } from '../utils/interfaces';
+import { sendEmailToPurchaser, generateConditions } from '../utils/helper';
+
+const VehicleAd = db.vehicleAd;
+
+export const create = (req: Request, res: Response) => {
+  const vehicleAd = {
+    name: req.body.name,
+    type: req.body.type,
+    color: req.body.color,
+    year: req.body.year,
+    userId: req.params.id,
+    price: req.body.price,
+  };
+
+  VehicleAd.create(vehicleAd)
+    .then((data: VehicleAdAttributes) => {
+      res.status(201).send(data);
+    })
+    .catch((err: Error) => {
+      res.status(500).send({
+        message:
+          err.message || 'Some error occurred while creating a vehicleAd.',
+      });
+    });
+}
+
+export const findAll = (req: Request, res: Response) => {
+  VehicleAd.findAll()
+    .then((data: VehicleAdAttributes[]) => {
+      res.status(200).send(data);
+    })
+    .catch((err: Error) => {
+      res.status(500).send({
+        message:
+          err.message || 'Some error occurred while retrieving all vehicles.',
+      });
+    });
+}
+
+export const findAllUserVehicleAds = (req: Request, res: Response) => {
+  const userId = req.params.id;
+
+  VehicleAd.findAll({
+    where: { userId: userId },
+    attributes: { exclude: ['userId'] },
+  })
+    .then((data: VehicleAdAttributes[]) => {
+      res.status(200).send(data);
+    })
+    .catch((err: Error) => {
+      res.status(500).send({
+        message:
+          err.message ||
+          "Some error occurred while retrieving user's vehicles.",
+      });
+    });
+}
+
+export const findById = (req: Request, res: Response) => {
+  const id = req.params.id;
+
+  VehicleAd.findByPk(id, {
+    include: db.user,
+    attributes: { exclude: ['userId'] },
+  })
+    .then((data: any) => {
+      if (data) {
+        res.status(200).send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find vehicleAd with id=${id}.`,
+        });
+      }
+    })
+    .catch((err: Error) => {
+      res.status(500).send({
+        message:
+          err.message ||
+          'Some error occurred while retrieving specific vehicleAd.',
+      });
+    });
+}
+
+export const updateObject = (req: Request, res: Response) => {
+  const id = req.params.id;
+  const newObject = req.body;
+
+  VehicleAd.update(newObject, { where: { id: id } })
+    .then((num: any) => {
+      if (num == 1) {
+        res.send({
+          message: 'VehicleAd was updated successfully.',
+        });
+      } else {
+        res.send({
+          message: `Cannot update vehicleAd with id=${id}.`,
+        });
+      }
+    })
+    .catch((err: Error) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while updating vehicleAd's data.",
+      });
+    });
+}
+
+export const findAllWithFilters = (req: Request, res: Response) => {
+  VehicleAd.findAll({
+    where: generateConditions(req.query),
+    attributes: { exclude: ['userId'] },
+  })
+    .then((data: VehicleAdAttributes[]) => {
+      res.status(200).send(data);
+    })
+    .catch((err: Error) => {
+      res.status(500).send({
+        message:
+          err.message ||
+          'Some error occurred while retrieving filtered vehicles.',
+      });
+    });
+}
+
+const handleDelete = (id: string, res: Response, onSuccess: () => void) => {
+  VehicleAd.destroy({ where: { id: id } })
+    .then((num: number) => {
+      if (num === 1) {
+        onSuccess();
+      } else {
+        res.send({
+          message: `Cannot delete VehicleAd with id=${id}.`,
+        });
+      }
+    })
+    .catch((err: Error) => {
+      res.status(500).send({
+        message: err.message || 'Some error occurred while deleting vehicleAd.',
+      });
+    });
+}
+
+export const purchaseVehicle = (req: Request, res: Response) => {
+  const id = req.params.id;
+  const purchaserEmail = req.query.purchaser_email as string;
+  const purchaserName = req.query.purchaser_name as string;
+
+  handleDelete(id, res, () => {
+    if (purchaserEmail) sendEmailToPurchaser(purchaserEmail, purchaserName);
+    res.send({
+      message: 'VehicleAd was deleted successfully!',
+    });
+  });
+}
+
+export const deleteVehicle = (req: Request, res: Response) => {
+  const id = req.params.id;
+
+  handleDelete(id, res, () => {
+    res.send({
+      message: 'VehicleAd was deleted successfully!',
+    });
+  });
+}
+
