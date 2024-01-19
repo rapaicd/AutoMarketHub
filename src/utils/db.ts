@@ -1,24 +1,23 @@
 import { Sequelize, Options } from 'sequelize';
-import DBConfig from "../config/db.config";
-import { DBConfigProps } from '../utils/interfaces'
-import User from './users.model';
-import VehicleAd from './vehicleAds.model';
+import { DBConfigProps } from './interfaces'
+import User from '../models/users.model';
+import VehicleAd from '../models/vehicleAds.model';
 
 const sequelizeOptions: Options = {
-    host: DBConfig.HOST,
+    host: process.env.DBHOST || 'localhost',
     dialect: 'mysql',
     pool: {
-        max: DBConfig.pool.max,
-        min: DBConfig.pool.min,
-        acquire: DBConfig.pool.acquire,
-        idle: DBConfig.pool.idle
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000,
     }
 };
 
 const sequelize = new Sequelize(
-    DBConfig.DB,
-    DBConfig.USER,
-    DBConfig.PASSWORD,
+    process.env.dbName || '',
+    process.env.dbUser || '',
+    process.env.dbPassword || '',
     sequelizeOptions
 );
 

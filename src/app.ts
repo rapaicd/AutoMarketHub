@@ -1,34 +1,30 @@
-import express, { Express, Request, Response } from "express";
-import dotenv from "dotenv";
+import express, { Express } from "express";
+import 'dotenv/config';
 import cors from 'cors';
-import db from "./models/db";
+import db from "./utils/db";
 import userRouter from './routes/users.routes'
 import vehicleAdRouter from './routes/vehicleAds.routes'
 
 const app: Express = express();
 
-dotenv.config();
+const port = process.env.PORT || 3000;
 
 const corsOptions = {
-  origin: 'http://localhost:3000'
+  origin: process.env.originUrl,
 };
 app.use(cors(corsOptions));
-
 app.use(express.json());
 
+// db.sequelize.sync({ force: false }) //Drop and re-sync db
 db.sequelize.sync()
   .then(() => {
-    console.log("Synced db.");
+    app.listen(port, () => {
+      console.log(`[server]: Server is running on port: ${port}`);
+    });
   })
   .catch((err: Error) => {
     console.log("Failed to sync db: " + err.message);
   });
-
-
-// set force to true for drop all tables
-db.sequelize.sync({ force: false }).then(() => {
-  console.log("Drop and re-sync db.");
-});
 
 app.use('/users', userRouter)
 app.use('/vehicleAds', vehicleAdRouter) 

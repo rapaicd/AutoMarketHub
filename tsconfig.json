@@ -107,5 +107,5 @@
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
   "exclude": [ "src", "wwwroot" ],
-  "include": [ "server.ts" ] //check this
+  "include": [ "tsfile.ts" ] //check this
 }

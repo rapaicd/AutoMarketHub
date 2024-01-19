@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import db from "../models/db";
+import db from "../utils/db";
 import { VehicleAdAttributes } from "../utils/interfaces";
 import {generateConditions} from "../utils/helper"
 

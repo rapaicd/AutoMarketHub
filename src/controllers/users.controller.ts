@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import db from "../models/db";
+import db from "../utils/db";
 import { UserAttributes } from "../utils/interfaces";
 
 const User = db.user;
