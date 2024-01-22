@@ -1,5 +1,5 @@
 import { Sequelize, Options } from 'sequelize';
-import { DBConfigProps } from './interfaces'
+import { DBConfigProps } from '../utils/interfaces'
 import User from '../models/users.model';
 import VehicleAd from '../models/vehicleAds.model';
 

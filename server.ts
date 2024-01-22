@@ -1,7 +1,7 @@
 import express, { Express } from 'express';
 import 'dotenv/config';
 import cors from 'cors';
-import db from './src/utils/db';
+import db from './src/config/db';
 import userRouter from './src/routes/users.routes';
 import vehicleAdRouter from './src/routes/vehicleAds.routes';
 
