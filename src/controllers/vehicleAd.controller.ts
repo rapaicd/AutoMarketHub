@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import db from '../config/db';
-import { PurchaserDataType, VehicleAdAttributes } from '../utils/interfaces';
+import db from '../config/db.config';
+import { VehicleAdAttributes } from '../utils/interfaces';
 import { sendEmailToPurchaser, generateConditions } from '../utils/helper';
 
 const VehicleAd = db.vehicleAd;
@@ -22,7 +22,7 @@ export const create = (req: Request, res: Response) => {
     .catch((err: Error) => {
       res.status(500).send({
         message:
-          err.message || 'Some error occurred while creating a vehicleAd.',
+          err.message || 'Some error occurred while creating a vehicle ad.',
       });
     });
 }
@@ -35,7 +35,7 @@ export const findAll = (req: Request, res: Response) => {
     .catch((err: Error) => {
       res.status(500).send({
         message:
-          err.message || 'Some error occurred while retrieving all vehicles.',
+          err.message || 'Some error occurred while retrieving all vehicle ads.',
       });
     });
 }
@@ -54,7 +54,7 @@ export const findAllUserVehicleAds = (req: Request, res: Response) => {
       res.status(500).send({
         message:
           err.message ||
-          "Some error occurred while retrieving user's vehicles.",
+          "Some error occurred while retrieving user's vehicle ads.",
       });
     });
 }
@@ -71,7 +71,7 @@ export const findById = (req: Request, res: Response) => {
         res.status(200).send(data);
       } else {
         res.status(404).send({
-          message: `Cannot find vehicleAd with id=${id}.`,
+          message: `Cannot find vehicle ad with id=${id}.`,
         });
       }
     })
@@ -79,7 +79,7 @@ export const findById = (req: Request, res: Response) => {
       res.status(500).send({
         message:
           err.message ||
-          'Some error occurred while retrieving specific vehicleAd.',
+          'Some error occurred while retrieving specific vehicle ad.',
       });
     });
 }
@@ -92,18 +92,18 @@ export const updateObject = (req: Request, res: Response) => {
     .then((num: any) => {
       if (num == 1) {
         res.send({
-          message: 'VehicleAd was updated successfully.',
+          message: 'Vehicle ad was updated successfully.',
         });
       } else {
         res.send({
-          message: `Cannot update vehicleAd with id=${id}.`,
+          message: `Cannot update vehicle ad with id=${id}.`,
         });
       }
     })
     .catch((err: Error) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while updating vehicleAd's data.",
+          err.message || "Some error occurred while updating vehicle ad's data.",
       });
     });
 }
@@ -120,7 +120,7 @@ export const findAllWithFilters = (req: Request, res: Response) => {
       res.status(500).send({
         message:
           err.message ||
-          'Some error occurred while retrieving filtered vehicles.',
+          'Some error occurred while retrieving filtered vehicle ads.',
       });
     });
 }
@@ -132,13 +132,13 @@ const handleDelete = (id: string, res: Response, onSuccess: () => void) => {
         onSuccess();
       } else {
         res.send({
-          message: `Cannot delete VehicleAd with id=${id}.`,
+          message: `Cannot delete Vehicle ad with id=${id}.`,
         });
       }
     })
     .catch((err: Error) => {
       res.status(500).send({
-        message: err.message || 'Some error occurred while deleting vehicleAd.',
+        message: err.message || 'Some error occurred while deleting vehicle ad.',
       });
     });
 }
@@ -151,7 +151,7 @@ export const purchaseVehicle = (req: Request, res: Response) => {
   handleDelete(id, res, () => {
     if (purchaserEmail) sendEmailToPurchaser(purchaserEmail, purchaserName);
     res.send({
-      message: 'VehicleAd was deleted successfully!',
+      message: 'Vehicle ad was deleted successfully!',
     });
   });
 }
@@ -161,7 +161,7 @@ export const deleteVehicle = (req: Request, res: Response) => {
 
   handleDelete(id, res, () => {
     res.send({
-      message: 'VehicleAd was deleted successfully!',
+      message: 'Vehicle ad was deleted successfully!',
     });
   });
 }

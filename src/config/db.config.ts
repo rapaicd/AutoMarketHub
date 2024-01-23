@@ -1,7 +1,7 @@
 import { Sequelize, Options } from 'sequelize';
 import { DBConfigProps } from '../utils/interfaces'
-import User from '../models/users.model';
-import VehicleAd from '../models/vehicleAds.model';
+import User from '../models/user.model';
+import VehicleAd from '../models/vehicleAd.model';
 
 const sequelizeOptions: Options = {
     host: process.env.DB_HOST || 'localhost',

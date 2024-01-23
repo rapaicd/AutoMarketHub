@@ -1,9 +1,9 @@
 import express, { Express } from 'express';
 import 'dotenv/config';
 import cors from 'cors';
-import db from './src/config/db';
-import userRouter from './src/routes/users.routes';
-import vehicleAdRouter from './src/routes/vehicleAds.routes';
+import db from './src/config/db.config';
+import userRouter from './src/routes/user.routes';
+import vehicleAdRouter from './src/routes/vehicleAd.routes';
 
 const app: Express = express();
 

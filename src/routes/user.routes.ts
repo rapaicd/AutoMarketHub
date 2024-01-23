@@ -1,5 +1,5 @@
 const userRouter = require("express").Router();
-import {create, findAll, findById, updateObject, deleteObject} from '../controllers/users.controller';
+import {create, findAll, findById, updateObject, deleteObject} from '../controllers/user.controller';
 
 userRouter.route('/')
     .get(findAll)

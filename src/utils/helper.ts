@@ -7,7 +7,7 @@ import {
   PurchaserDataType,
   Query,
 } from './interfaces';
-import { subject, intro } from '../messages/emailMessage';
+import { SUBJECT, INTRO } from '../messages/emailMessage';
 
 export const generateConditions = (query: Query) => {
   const conditions: WhereOptions<ConditionQuery> = {};
@@ -76,7 +76,7 @@ export const sendEmailToPurchaser = (
   let response = {
     body: {
       name: purchaserName,
-      intro,
+      intro: INTRO,
     },
   };
 
@@ -92,7 +92,7 @@ export const sendEmailToPurchaser = (
   let message: EmailMessageAttributes = {
     from: process.env.GMAIL_APP_USER,
     to: purchaserEmail,
-    subject,
+    subject: SUBJECT,
     html: mail,
   };
 

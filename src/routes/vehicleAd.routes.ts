@@ -8,7 +8,7 @@ import {
   findAllUserVehicleAds,
   findAllWithFilters,
   deleteVehicle,
-} from '../controllers/vehicleAds.controller';
+} from '../controllers/vehicleAd.controller';
 
 vehicleAdRouter.get('/filter', findAllWithFilters);
 vehicleAdRouter.get('/', findAll);
