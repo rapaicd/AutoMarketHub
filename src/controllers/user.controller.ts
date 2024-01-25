@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import db from "../config/db.config";
-import { UserAttributes } from "../utils/interfaces";
+import { AuthenticatedRequest, UserAttributes } from "../utils/interfaces";
+import { checkIsModeratorOrAdmin } from "../utils/helper";
 
 const User = db.user;
 
@@ -38,11 +39,15 @@ export const findById = (req: Request, res: Response) => {
         });
 };
 
-export const updateUser = (req: Request, res: Response) => {
-    const id = req.params.id;
+export const updateUser = async (req: AuthenticatedRequest, res: Response) => {
+    const id = +req.params.id;
     const newObject = req.body;
 
-    User.update(newObject, { where: { id: id } })
+    if (id !== req.userId && !(await checkIsModeratorOrAdmin(req.userId))) {
+        res.status(403).send({ message: "You do not have permission to update this user!" })
+        return
+    }
+    User.update(newObject, { where: { id: id }, fields: ['first_name', 'last_name', 'phone_number'] })
         .then((num: number[]) => {
             if (num[0] == 1) {
                 res.send({

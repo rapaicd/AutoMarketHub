@@ -1,17 +1,16 @@
 import { Request, Response } from 'express';
 import db from '../config/db.config';
-import { VehicleAdAttributes } from '../utils/interfaces';
-import { sendEmailToPurchaser, generateConditions } from '../utils/helper';
+import { AuthenticatedRequest, RequestWithNameAndEmail, VehicleAdAttributes } from '../utils/interfaces';
+import { sendEmailToPurchaser, generateConditions, checkIsModeratorOrAdmin } from '../utils/helper';
 
 const VehicleAd = db.vehicleAd;
-
-export const createVehicleAd = (req: Request, res: Response) => {
+export const createVehicleAd = (req: AuthenticatedRequest, res: Response) => {
   const vehicleAd = {
     name: req.body.name,
     type: req.body.type,
     color: req.body.color,
     year: req.body.year,
-    userId: req.params.id,
+    userId: req.userId,
     price: req.body.price,
   };
 
@@ -40,11 +39,11 @@ export const findAll = (req: Request, res: Response) => {
     });
 }
 
-export const findAllUserVehicleAds = (req: Request, res: Response) => {
-  const userId = req.params.id;
+export const findAllUserVehicleAds = (req: AuthenticatedRequest, res: Response) => {
+  const userId = req.userId;
 
   VehicleAd.findAll({
-    where: { userId: userId },
+    where: { userId },
     attributes: { exclude: ['userId'] },
   })
     .then((data: VehicleAdAttributes[]) => {
@@ -84,10 +83,13 @@ export const findById = (req: Request, res: Response) => {
     });
 }
 
-export const updateVehicleAd = (req: Request, res: Response) => {
-  const id = req.params.id;
+export const updateVehicleAd = (req: AuthenticatedRequest, res: Response) => {
+  const id = +req.params.id;
   const newObject = req.body;
-
+  if (id !== req.userId) {
+    res.status(403).send({ message: "You do not have permission to update this Ad!" })
+    return
+  }
   VehicleAd.update(newObject, { where: { id: id } })
     .then((num: number[]) => {
       if (num[0] == 1) {
@@ -143,10 +145,10 @@ const handleDelete = (id: string, res: Response, onSuccess: () => void) => {
     });
 }
 
-export const purchaseVehicleAd = (req: Request, res: Response) => {
+export const purchaseVehicleAd = (req: RequestWithNameAndEmail, res: Response) => {
   const id = req.params.id;
-  const purchaserEmail = req.query.purchaser_email as string;
-  const purchaserName = req.query.purchaser_name as string;
+  const purchaserEmail = req.email;
+  const purchaserName = req.first_name;
 
   handleDelete(id, res, () => {
     if (purchaserEmail) sendEmailToPurchaser(purchaserEmail, purchaserName);
@@ -156,8 +158,23 @@ export const purchaseVehicleAd = (req: Request, res: Response) => {
   });
 }
 
-export const deleteVehicleAd = (req: Request, res: Response) => {
+export const deleteVehicleAd = async (req: AuthenticatedRequest, res: Response) => {
   const id = req.params.id;
+  let adCreatorId: Number | undefined;
+  
+  VehicleAd.findByPk(id, {
+    attributes: ['userId'],
+  })
+    .then((data: VehicleAdAttributes | null) => {
+      adCreatorId = data?.userId
+    }).catch((error: Error) => {
+      console.error("Error fetching VehicleAd:", error);
+    });
+
+  if (req.userId !== adCreatorId && !(await checkIsModeratorOrAdmin(req.userId))) {
+    res.status(403).send({ message: 'You do not have permission to delete this ad!' })
+    return
+  }
 
   handleDelete(id, res, () => {
     res.send({

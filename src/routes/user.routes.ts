@@ -3,9 +3,9 @@ import { findAll, findById, updateUser, deleteObject } from '../controllers/user
 import verifySignUp from '../middleware/auth.middleware';
 
 userRouter.use(verifySignUp.verifyToken)
-userRouter.get('/', verifySignUp.isModeratorOrAdmin, findAll)
-userRouter.get('/:id', verifySignUp.isModeratorOrAdmin, findById)
-userRouter.put('/:id', verifySignUp.isAdmin, updateUser)
+userRouter.get('/', findAll)
+userRouter.get('/:id', findById)
+userRouter.put('/:id', updateUser)
 userRouter.delete('/:id', verifySignUp.isAdmin, deleteObject)
 
 export default userRouter;

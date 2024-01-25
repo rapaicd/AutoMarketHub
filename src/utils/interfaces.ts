@@ -1,5 +1,7 @@
 import { BuildOptions, Model, Sequelize } from "sequelize";
+import { Request } from 'express';
 import { Op } from 'sequelize';
+
 export interface UserAttributes {
     id:number;
     first_name: string;
@@ -11,10 +13,12 @@ export interface UserAttributes {
 
 export interface VehicleAdAttributes {
     //id?
+    name:string;
     type: string;
     color: string;
     year: string;
     userId: Number;
+    price:Number;
 }
 
 export interface RoleAttributes {
@@ -69,4 +73,11 @@ export interface EmailMessageAttributes{
     html:string;
 }
 
-export type PurchaserDataType = string | undefined; 
+export interface AuthenticatedRequest extends Request {
+    userId?: number;
+}
+
+export interface RequestWithNameAndEmail extends AuthenticatedRequest {
+    email?:string;
+    first_name?:string;
+}
