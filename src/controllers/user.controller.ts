@@ -4,28 +4,8 @@ import { UserAttributes } from "../utils/interfaces";
 
 const User = db.user;
 
-export const create = (req: Request, res: Response) => {
-    const user = {
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        phone_number: req.body.phone_number,
-        email: req.body.email,
-    };
-
-    User.create(user)
-        .then((data: UserAttributes) => {
-            res.status(201).send(data);
-        })
-        .catch((err: Error) => {
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating a user."
-            });
-        });
-};
-
 export const findAll = (req: Request, res: Response) => {
-    User.findAll()
+    User.findAll({ attributes: { exclude: ['password'] } })
         .then((data: UserAttributes[]) => {
             res.status(200).send(data);
         })
@@ -40,7 +20,7 @@ export const findAll = (req: Request, res: Response) => {
 export const findById = (req: Request, res: Response) => {
     const id = req.params.id;
 
-    User.findByPk(id)
+    User.findByPk(id, { attributes: { exclude: ['password'] } })
         .then((data: any) => {
             if (data) {
                 res.status(200).send(data);

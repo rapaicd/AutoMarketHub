@@ -8,6 +8,7 @@ import {
   Query,
 } from './interfaces';
 import { SUBJECT, INTRO } from '../messages/emailMessage';
+import db from '../config/db.config';
 
 export const generateConditions = (query: Query) => {
   const conditions: WhereOptions<ConditionQuery> = {};
@@ -106,3 +107,17 @@ export const sendEmailToPurchaser = (
       console.log('Error message: ', err.message);
     });
 };
+
+export const initial = () => {
+  db.role.create({
+    name: "user"
+  });
+ 
+  db.role.create({
+    name: "moderator"
+  });
+ 
+  db.role.create({
+    name: "admin"
+  });
+}

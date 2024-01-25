@@ -1,11 +1,11 @@
 const userRouter = require("express").Router();
-import {create, findAll, findById, updateObject, deleteObject} from '../controllers/user.controller';
+import { findAll, findById, updateObject, deleteObject } from '../controllers/user.controller';
+import verifySignUp from '../middleware/auth.middleware';
 
-userRouter.route('/')
-    .get(findAll)
-    .post(create);
-userRouter.get('/:id',findById)
-userRouter.put('/:id',updateObject)
-userRouter.delete('/:id',deleteObject)
+userRouter.use(verifySignUp.verifyToken)
+userRouter.get('/', verifySignUp.isModeratorOrAdmin, findAll)
+userRouter.get('/:id', verifySignUp.isModeratorOrAdmin, findById)
+userRouter.put('/:id', verifySignUp.isAdmin, updateObject)
+userRouter.delete('/:id', verifySignUp.isAdmin, deleteObject)
 
 export default userRouter;

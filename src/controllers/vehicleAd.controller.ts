@@ -5,7 +5,7 @@ import { sendEmailToPurchaser, generateConditions } from '../utils/helper';
 
 const VehicleAd = db.vehicleAd;
 
-export const create = (req: Request, res: Response) => {
+export const createVehicleAd = (req: Request, res: Response) => {
   const vehicleAd = {
     name: req.body.name,
     type: req.body.type,
@@ -84,7 +84,7 @@ export const findById = (req: Request, res: Response) => {
     });
 }
 
-export const updateObject = (req: Request, res: Response) => {
+export const updateVehicleAd = (req: Request, res: Response) => {
   const id = req.params.id;
   const newObject = req.body;
 
@@ -143,7 +143,7 @@ const handleDelete = (id: string, res: Response, onSuccess: () => void) => {
     });
 }
 
-export const purchaseVehicle = (req: Request, res: Response) => {
+export const purchaseVehicleAd = (req: Request, res: Response) => {
   const id = req.params.id;
   const purchaserEmail = req.query.purchaser_email as string;
   const purchaserName = req.query.purchaser_name as string;
@@ -156,7 +156,7 @@ export const purchaseVehicle = (req: Request, res: Response) => {
   });
 }
 
-export const deleteVehicle = (req: Request, res: Response) => {
+export const deleteVehicleAd = (req: Request, res: Response) => {
   const id = req.params.id;
 
   handleDelete(id, res, () => {
