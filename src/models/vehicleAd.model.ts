@@ -26,7 +26,7 @@ const VehicleAd = (sequelize: Sequelize): VehicleAdStatic => {
       }
     },
     price: {
-      type: DataTypes.DECIMAL,
+      type: DataTypes.FLOAT,
       allowNull: false,
       validate:{
         isDecimal:true

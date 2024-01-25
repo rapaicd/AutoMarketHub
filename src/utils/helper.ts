@@ -4,10 +4,11 @@ import Mailgen from 'mailgen';
 import {
   ConditionQuery,
   EmailMessageAttributes,
-  PurchaserDataType,
   Query,
+  RoleAttributes,
 } from './interfaces';
-import { subject, intro } from '../messages/emailMessage';
+import { SUBJECT, INTRO } from '../messages/emailMessage';
+import db from '../config/db.config';
 
 export const generateConditions = (query: Query) => {
   const conditions: WhereOptions<ConditionQuery> = {};
@@ -62,8 +63,8 @@ export const generateConditions = (query: Query) => {
 };
 
 export const sendEmailToPurchaser = (
-  purchaserEmail: PurchaserDataType,
-  purchaserName: PurchaserDataType
+  purchaserEmail: string,
+  purchaserName: string | undefined
 ) => {
   let config = {
     service: 'gmail',
@@ -75,8 +76,8 @@ export const sendEmailToPurchaser = (
 
   let response = {
     body: {
-      name: purchaserName,
-      intro,
+      name: purchaserName?purchaserName:purchaserEmail,
+      intro: INTRO,
     },
   };
 
@@ -92,7 +93,7 @@ export const sendEmailToPurchaser = (
   let message: EmailMessageAttributes = {
     from: process.env.GMAIL_APP_USER,
     to: purchaserEmail,
-    subject,
+    subject: SUBJECT,
     html: mail,
   };
 
@@ -104,5 +105,40 @@ export const sendEmailToPurchaser = (
     })
     .catch((err: Error) => {
       console.log('Error message: ', err.message);
+    });
+};
+
+export const initial = () => {
+  db.role.create({
+    name: "user"
+  });
+
+  db.role.create({
+    name: "moderator"
+  });
+
+  db.role.create({
+    name: "admin"
+  });
+}
+
+export const checkIsModeratorOrAdmin = async (userId: number | undefined): Promise<boolean> => {
+  return db.user.findByPk(userId)
+    .then((user: any) => {
+      if (!user) return false;
+      return user.getRoles()
+        .then((roles: RoleAttributes[]) => {
+          for (let i = 0; i < roles.length; i++) {
+            if (roles[i].name === "moderator" || roles[i].name === "admin") {
+              console.log(roles[i].name);
+              return true;
+            }
+          }
+          return false;
+        });
+    })
+    .catch((error: Error) => {
+      console.error("Error checking user roles:", error);
+      return false;
     });
 };

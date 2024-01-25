@@ -1,31 +1,12 @@
 import { Request, Response } from "express";
-import db from "../utils/db";
-import { UserAttributes } from "../utils/interfaces";
+import db from "../config/db.config";
+import { AuthenticatedRequest, UserAttributes } from "../utils/interfaces";
+import { checkIsModeratorOrAdmin } from "../utils/helper";
 
 const User = db.user;
 
-export const create = (req: Request, res: Response) => {
-    const user = {
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        phone_number: req.body.phone_number,
-        email: req.body.email,
-    };
-
-    User.create(user)
-        .then((data: UserAttributes) => {
-            res.status(201).send(data);
-        })
-        .catch((err: Error) => {
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating a user."
-            });
-        });
-};
-
 export const findAll = (req: Request, res: Response) => {
-    User.findAll()
+    User.findAll({ attributes: { exclude: ['password'] } })
         .then((data: UserAttributes[]) => {
             res.status(200).send(data);
         })
@@ -40,8 +21,8 @@ export const findAll = (req: Request, res: Response) => {
 export const findById = (req: Request, res: Response) => {
     const id = req.params.id;
 
-    User.findByPk(id)
-        .then((data: any) => {
+    User.findByPk(id, { attributes: { exclude: ['password'] } })
+        .then((data: UserAttributes | null) => {
             if (data) {
                 res.status(200).send(data);
             } else {
@@ -58,13 +39,17 @@ export const findById = (req: Request, res: Response) => {
         });
 };
 
-export const updateObject = (req: Request, res: Response) => {
-    const id = req.params.id;
+export const updateUser = async (req: AuthenticatedRequest, res: Response) => {
+    const id = +req.params.id;
     const newObject = req.body;
 
-    User.update(newObject, { where: { id: id } })
-        .then((num: any) => {
-            if (num == 1) {
+    if (id !== req.userId && !(await checkIsModeratorOrAdmin(req.userId))) {
+        res.status(403).send({ message: "You do not have permission to update this user!" })
+        return
+    }
+    User.update(newObject, { where: { id: id }, fields: ['first_name', 'last_name', 'phone_number'] })
+        .then((num: number[]) => {
+            if (num[0] == 1) {
                 res.send({
                     message: "User was updated successfully."
                 });

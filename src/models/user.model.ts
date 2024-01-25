@@ -38,6 +38,10 @@ const User = (sequelize: Sequelize): UserStatic => {
     },
     phone_number: {
       type: DataTypes.STRING
+    },
+    password:{
+      type:DataTypes.STRING,
+      allowNull: false,
     }
   });
 };

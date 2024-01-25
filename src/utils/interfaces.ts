@@ -1,16 +1,29 @@
 import { BuildOptions, Model, Sequelize } from "sequelize";
+import { Request } from 'express';
 import { Op } from 'sequelize';
+
 export interface UserAttributes {
+    id:number;
     first_name: string;
     last_name: string;
-    phone_number: string
+    phone_number: string;
+    password:string;
+    email:string;
 }
 
 export interface VehicleAdAttributes {
+    //id?
+    name:string;
     type: string;
     color: string;
     year: string;
     userId: Number;
+    price:Number;
+}
+
+export interface RoleAttributes {
+    id:number;
+    name: string;
 }
 
 type UserModel = Model & UserAttributes;
@@ -23,10 +36,16 @@ export type VehicleAdStatic = typeof Model & {
     new(values?: Record<string, unknown>, options?: BuildOptions): VehicleModel;
 };
 
+type RoleModel = Model & RoleAttributes;
+export type RoleStatic = typeof Model & {
+    new(values?: Record<string, unknown>, options?: BuildOptions): RoleModel;
+};
+
 export interface DBConfigProps {
     sequelize: Sequelize;
     user: UserStatic;
     vehicleAd: VehicleAdStatic;
+    role: RoleStatic;
 }
 
 export interface Query {
@@ -54,4 +73,11 @@ export interface EmailMessageAttributes{
     html:string;
 }
 
-export type PurchaserDataType = string | undefined; 
+export interface AuthenticatedRequest extends Request {
+    userId?: number;
+}
+
+export interface RequestWithNameAndEmail extends AuthenticatedRequest {
+    email?:string;
+    first_name?:string;
+}
