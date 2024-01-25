@@ -66,7 +66,7 @@ export const findById = (req: Request, res: Response) => {
     include: db.user,
     attributes: { exclude: ['userId'] },
   })
-    .then((data: any) => {
+    .then((data: VehicleAdAttributes | null) => {
       if (data) {
         res.status(200).send(data);
       } else {
@@ -89,8 +89,8 @@ export const updateVehicleAd = (req: Request, res: Response) => {
   const newObject = req.body;
 
   VehicleAd.update(newObject, { where: { id: id } })
-    .then((num: any) => {
-      if (num == 1) {
+    .then((num: number[]) => {
+      if (num[0] == 1) {
         res.send({
           message: 'Vehicle ad was updated successfully.',
         });

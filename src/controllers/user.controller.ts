@@ -21,7 +21,7 @@ export const findById = (req: Request, res: Response) => {
     const id = req.params.id;
 
     User.findByPk(id, { attributes: { exclude: ['password'] } })
-        .then((data: any) => {
+        .then((data: UserAttributes | null) => {
             if (data) {
                 res.status(200).send(data);
             } else {
@@ -38,13 +38,13 @@ export const findById = (req: Request, res: Response) => {
         });
 };
 
-export const updateObject = (req: Request, res: Response) => {
+export const updateUser = (req: Request, res: Response) => {
     const id = req.params.id;
     const newObject = req.body;
 
     User.update(newObject, { where: { id: id } })
-        .then((num: any) => {
-            if (num == 1) {
+        .then((num: number[]) => {
+            if (num[0] == 1) {
                 res.send({
                     message: "User was updated successfully."
                 });

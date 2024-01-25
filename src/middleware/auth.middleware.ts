@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload, VerifyErrors } from "jsonwebtoken";
 import db from '../config/db.config';
-import { RoleAttributes } from '../utils/interfaces';
+import { RoleAttributes, UserAttributes } from '../utils/interfaces';
 
 interface AuthenticatedRequest extends Request {
     userId?: number;
@@ -13,7 +13,7 @@ const checkDuplicateEmail = (req: Request, res: Response, next: NextFunction) =>
         where: {
             email: req.body.email
         }
-    }).then((user: any) => {
+    }).then((user: UserAttributes | null) => {
         if (user) {
             res.status(400).send({
                 message: "Failed! Email is already in use!"
@@ -54,12 +54,14 @@ const verifyToken = (req: AuthenticatedRequest, res: Response, next: NextFunctio
 
     jwt.verify(token,
         process.env.JWT_SECRET || '',
-        (err: Error | null, decoded: any) => {
+        (err: VerifyErrors  | null, decoded: any) => {
             if (err) {
                 return res.status(401).send({
                     message: "Unauthorized!",
                 });
             }
+            console.log('decode',decoded)
+            console.log('decode',typeof decoded)
             req.userId = decoded?.id;
             return next();
         });
@@ -84,7 +86,7 @@ const isAdmin = (req: AuthenticatedRequest, res:Response, next:NextFunction) => 
   };
   
   const isModerator = (req: AuthenticatedRequest, res:Response, next:NextFunction) => {
-    User.findByPk(req.userId).then((user:any) => {
+    User.findByPk(req.userId).then((user: any) => {
       user.getRoles().then((roles:RoleAttributes[]) => {
         for (let i = 0; i < roles.length; i++) {
           if (roles[i].name === "moderator") {
