@@ -5,7 +5,7 @@ import { checkIsModeratorOrAdmin } from "../utils/helper";
 
 const User = db.user;
 
-export const findAll = (req: Request, res: Response) => {
+export const findAllUsers = (req: Request, res: Response) => {
     User.findAll({ attributes: { exclude: ['password'] } })
         .then((data: UserAttributes[]) => {
             res.status(200).send(data);
@@ -18,7 +18,7 @@ export const findAll = (req: Request, res: Response) => {
         });
 };
 
-export const findById = (req: Request, res: Response) => {
+export const findUserById = (req: Request, res: Response) => {
     const id = req.params.id;
 
     User.findByPk(id, { attributes: { exclude: ['password'] } })
@@ -67,7 +67,7 @@ export const updateUser = async (req: AuthenticatedRequest, res: Response) => {
         });
 };
 
-export const deleteObject = (req: Request, res: Response) => {
+export const deleteUser = (req: Request, res: Response) => {
     const id = req.params.id;
 
     User.destroy({ where: { id: id } })

@@ -3,7 +3,7 @@ import { Op } from 'sequelize';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import db from '../config/db.config';
-import { RoleAttributes, UserAttributes } from '../utils/interfaces';
+import { AuthenticatedRequest, RoleAttributes, UserAttributes } from '../utils/interfaces';
 
 const { user: User, role: Role, role: UserRoles } = db;
 
@@ -16,7 +16,7 @@ export const signup = (req: Request, res: Response) => {
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 8)
   };
-  
+
   User.create(newUser)
     .then((user: any) => {
       if (req.body.roles) {
@@ -91,3 +91,29 @@ export const signin = (req: Request, res: Response): void => {
       res.status(500).send({ message: err.message });
     });
 };
+
+export const changePassword = async (req: AuthenticatedRequest, res: Response) => {
+  const oldPassword = req.body.old_password;
+  const newPassword = req.body.new_password;
+  const confirmNewPassword = req.body.confirm_new_password;
+
+  if (newPassword !== confirmNewPassword) {
+    res.status(400).send({ msg: 'New password and new repeted password is not the same!' })
+    return;
+  }
+
+  const user = await User.findByPk(req.userId)
+  const userPassword = user?.password!;
+
+  if (!bcrypt.compareSync(oldPassword, userPassword)) {
+    res.status(400).send({ msg: 'Old password is incorrect!' })
+    return;
+  }
+  const cryptedNewPassword = { password: bcrypt.hashSync(newPassword, 8) }
+
+  User.update(cryptedNewPassword, { where: { id: req.userId } })
+    .then(() => {
+      res.status(200).send({ msg: 'Password successfully updated!' })
+    })
+    .catch((err: Error) => console.error("Error while updating password! Error: ", err))
+}
