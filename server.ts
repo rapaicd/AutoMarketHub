@@ -1,6 +1,6 @@
 import express, { Express } from 'express';
-import 'dotenv/config';
 import cors from 'cors';
+import 'dotenv/config';
 import db from './src/config/db.config';
 import userRouter from './src/routes/user.routes';
 import vehicleAdRouter from './src/routes/vehicleAd.routes';
