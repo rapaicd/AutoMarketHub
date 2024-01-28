@@ -26,7 +26,7 @@ export const createVehicleAd = (req: AuthenticatedRequest, res: Response) => {
     });
 }
 
-export const findAll = (req: Request, res: Response) => {
+export const findAllVehicleAds = (req: Request, res: Response) => {
   VehicleAd.findAll()
     .then((data: VehicleAdAttributes[]) => {
       res.status(200).send(data);
@@ -58,7 +58,7 @@ export const findAllUserVehicleAds = (req: AuthenticatedRequest, res: Response) 
     });
 }
 
-export const findById = (req: Request, res: Response) => {
+export const findVehicleAdById = (req: Request, res: Response) => {
   const id = req.params.id;
 
   VehicleAd.findByPk(id, {

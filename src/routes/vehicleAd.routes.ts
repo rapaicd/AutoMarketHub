@@ -1,8 +1,8 @@
 const vehicleAdRouter = require('express').Router();
 import {
   createVehicleAd,
-  findAll,
-  findById,
+  findAllVehicleAds,
+  findVehicleAdById,
   updateVehicleAd,
   purchaseVehicleAd,
   findAllUserVehicleAds,
@@ -12,9 +12,9 @@ import {
 import verifySignUp from '../middleware/auth.middleware';
 
 vehicleAdRouter.get('/filter', findAllWithFilters);
-vehicleAdRouter.get('/', findAll);
+vehicleAdRouter.get('/', findAllVehicleAds);
 vehicleAdRouter.post('/', verifySignUp.verifyToken, createVehicleAd);
-vehicleAdRouter.get('/:id', findById);
+vehicleAdRouter.get('/:id', findVehicleAdById);
 vehicleAdRouter.put('/:id',verifySignUp.verifyToken, updateVehicleAd);
 vehicleAdRouter.delete('/purchase/:id',verifySignUp.verifyToken, purchaseVehicleAd);
 vehicleAdRouter.delete('/:id',verifySignUp.verifyToken, deleteVehicleAd); 
